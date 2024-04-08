@@ -1430,18 +1430,170 @@ function removeNonAlphanumericReplaceFixed(str) {
     return withoutNonAlphanumeric;
 }
 
-removeNonAlphanumericReplaceFixed("Hello! How are you? 123");
+// removeNonAlphanumericReplaceFixed("Hello! How are you? 123");
+
+
+// 36. Write a function to remove all vowels from a string.
+
+// 1st way
+
+function removeVowels(str) {
+    return str.replace(/[aeiouAEIOU]/g, '');
+}
+
+// const input = 'Hello World';
+// console.log(removeVowels(input)); // Output: "Hll Wrld"
+
+
+// 37. Write a function to remove all consonants from a string.
+
+// 1st way
+
+function removeConsonants(str) {
+    return str.replace(/[^aeiouAEIOU]/g, '');
+}
+
+// const input = 'Hello World';
+// console.log(removeConsonants(input)); // Output: "eo"
 
 
 
 
+// 38. Write a function to generate all permutations of a string.
+
+// 1st way
+
+function generatePermutations(str) {
+    const result = [];
+
+    function permute(current, remaining) {
+        if (remaining.length === 0) {
+            result.push(current);
+            return;
+        }
+
+        for (let i = 0; i < remaining.length; i++) {
+            const nextCurrent = current + remaining[i];
+            const nextRemaining = remaining.slice(0, i) + remaining.slice(i + 1);
+            permute(nextCurrent, nextRemaining);
+        }
+    }
+
+    permute('', str);
+    return result;
+}
+
+// const input = 'abc';
+// console.log(generatePermutations(input)); // Output: ["abc", "acb", "bac", "bca", "cab", "cba"]
+
+
+// 2nd way
+
+function generatePermutations(str) {
+    const result = [];
+
+    function backtrack(current, remaining) {
+        if (current.length === str.length) {
+            result.push(current);
+            return;
+        }
+
+        for (let i = 0; i < remaining.length; i++) {
+            const nextChar = remaining[i];
+            const nextRemaining = remaining.slice(0, i) + remaining.slice(i + 1);
+            backtrack(current + nextChar, nextRemaining);
+        }
+    }
+
+    backtrack('', str);
+    return result;
+}
+
+// const input = 'abc';
+// console.log(generatePermutations(input)); // Output: ["abc", "acb", "bac", "bca", "cab", "cba"]
 
 
 
+// 39. Write a function to find the first repeated character in a string.
+
+// 1st way 
+
+function firstRepeatedCharacter(str) {
+    const charMap = {};
+
+    for (const char of str) {
+        if (charMap[char]) {
+            return char;
+        } else {
+            charMap[char] = true;
+        }
+    }
+
+    return null; // If no repeated character found
+}
+
+// const input = 'abcdefgha';
+// console.log(firstRepeatedCharacter(input)); // Output: "a"
+
+
+// 2nd way
+
+function firstRepeatedCharacter(str) {
+    const set = new Set();
+    return [...str].find(char => set.has(char) || !set.add(char)) || null;
+}
+
+// const input = 'abcdefgha';
+// console.log(firstRepeatedCharacter(input)); // Output: "a"
+
+
+// 40. Write a function to find the longest substring without repeating characters.
+
+// 1st way
+
+function longestSubstringWithoutRepeating(str) {
+    let maxLength = 0;
+    let start = 0;
+    const charMap = {};
+
+    for (let end = 0; end < str.length; end++) {
+        const currentChar = str[end];
+        if (charMap[currentChar] >= start) {
+            start = charMap[currentChar] + 1;
+        }
+        charMap[currentChar] = end;
+        maxLength = Math.max(maxLength, end - start + 1);
+    }
+
+    return maxLength;
+}
+
+// const input = 'abcabcbb';
+// console.log(longestSubstringWithoutRepeating(input)); // Output: 3 (for "abc")
 
 
 
+// 2nd way
 
+function longestSubstringWithoutRepeating(str) {
+    const charSet = new Set();
+    let maxLength = 0;
+    let start = 0;
+
+    [...str].forEach((char, end) => {
+        while (charSet.has(char)) {
+            charSet.delete(str[start]);
+            start++;
+        }
+        charSet.add(char);
+        maxLength = Math.max(maxLength, end - start + 1);
+    });
+
+    return maxLength;
+}
+
+// const input = 'abcabcbb';
+// console.log(longestSubstringWithoutRepeating(input)); // Output: 3 (for "abc")
 
 
 

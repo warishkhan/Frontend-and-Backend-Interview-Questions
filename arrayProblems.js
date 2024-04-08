@@ -1543,30 +1543,422 @@ function mode(arr) {
 // console.log("Mode(s) of the array:", mode(array));
 
 
+// 31. Write a function to find the median of an array.
+
+// 1st way
+
+function findMedian(arr) {
+    const sortedArr = arr.slice().sort((a, b) => a - b);
+    const middleIndex = Math.floor(sortedArr.length / 2);
+
+    if (sortedArr.length % 2 === 0) {
+        return (sortedArr[middleIndex - 1] + sortedArr[middleIndex]) / 2;
+    } else {
+        return sortedArr[middleIndex];
+    }
+}
+
+// const arr = [3, 1, 4, 2, 5];
+// console.log(findMedian(arr)); // Output: 3
 
 
 
+// 32.Write a function to find the first non-repeating element in an array.
+
+// 1st way
+
+function findFirstNonRepeating(arr) {
+    const counts = {};
+
+    for (const num of arr) {
+        counts[num] = (counts[num] || 0) + 1;
+    }
+
+    for (const num of arr) {
+        if (counts[num] === 1) {
+            return num;
+        }
+    }
+
+    return null; // If no non-repeating element found
+}
+
+// const arr = [2, 3, 5, 3, 7, 5, 2];
+// console.log(findFirstNonRepeating(arr)); // Output: 7
+
+
+// 2nd way
+
+function findFirstNonRepeating(arr) {
+    const counts = new Map();
+
+    for (const num of arr) {
+        counts.set(num, (counts.get(num) || 0) + 1);
+    }
+
+    for (const [num, count] of counts) {
+        if (count === 1) {
+            return num;
+        }
+    }
+
+    return null; // If no non-repeating element found
+}
+
+// const arr = [2, 3, 5, 3, 7, 5, 2];
+// console.log(findFirstNonRepeating(arr)); // Output: 7
 
 
 
+// 33. Write a function to find the elements that occur only once in an array.
+
+// 1st way
+
+function findUniqueElements(arr) {
+    const counts = {};
+
+    for (const num of arr) {
+        counts[num] = (counts[num] || 0) + 1;
+    }
+
+    const uniqueElements = [];
+
+    for (const num in counts) {
+        if (counts[num] === 1) {
+            uniqueElements.push(Number(num));
+        }
+    }
+
+    return uniqueElements;
+}
+
+// const arr = [2, 3, 5, 3, 7, 5, 2];
+// console.log(findUniqueElements(arr)); // Output: [7]
+
+// 2nd way
+
+function findUniqueElements(arr) {
+    const counts = new Map();
+    const uniqueElements = [];
+
+    for (const num of arr) {
+        counts.set(num, (counts.get(num) || 0) + 1);
+    }
+
+    for (const num of arr) {
+        if (counts.get(num) === 1 && !uniqueElements.includes(num)) {
+            uniqueElements.push(num);
+        }
+    }
+
+    return uniqueElements;
+}
+
+// const arr = [2, 3, 5, 3, 7, 5, 2];
+// console.log(findUniqueElements(arr)); // Output: [7]
 
 
 
+// 34. Write a function to remove all instances of a specific value from an array.
+
+// 1st way
+
+function removeInstances(arr, value) {
+    return arr.filter(item => item !== value);
+}
+
+// const arr = [1, 2, 3, 4, 2, 5];
+// console.log(removeInstances(arr, 2)); // Output: [1, 3, 4, 5]
+
+
+// 2nd way
+
+function removeInstances(arr, value) {
+    let i = 0;
+    while (i < arr.length) {
+        if (arr[i] === value) {
+            arr.splice(i, 1);
+        } else {
+            i++;
+        }
+    }
+    return arr;
+}
+
+// const arr = [1, 2, 3, 4, 2, 5];
+// console.log(removeInstances(arr, 2)); // Output: [1, 3, 4, 5]
 
 
 
+// 35. Write a function to shuffle the elements of an array.
+
+// 1st way
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// const arr = [1, 2, 3, 4, 5];
+// console.log(shuffleArray(arr)); // Output: [3, 1, 5, 4, 2] (example)
+
+
+// 2nd way
+
+function shuffleArray(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+}
+
+// const arr = [1, 2, 3, 4, 5];
+// console.log(shuffleArray(arr)); // Output: [3, 1, 5, 4, 2] (example)
+
+
+// 36. Write a function to find the longest consecutive sequence in an unsorted array.
+
+// 1st way
+
+function longestConsecutiveSequence(arr) {
+    arr.sort((a, b) => a - b);
+    let longestSequence = 0;
+    let currentSequence = 1;
+
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] === arr[i - 1] + 1) {
+            currentSequence++;
+        } else if (arr[i] !== arr[i - 1]) {
+            longestSequence = Math.max(longestSequence, currentSequence);
+            currentSequence = 1;
+        }
+    }
+
+    return Math.max(longestSequence, currentSequence);
+}
+
+// const arr = [100, 4, 200, 1, 3, 2];
+// console.log(longestConsecutiveSequence(arr)); // Output: 4
+
+
+// 2nd way
+
+function longestConsecutiveSequence(arr) {
+    const numSet = new Set(arr);
+    let longestSequence = 0;
+
+    for (const num of numSet) {
+        if (!numSet.has(num - 1)) {
+            let currentNum = num;
+            let currentSequence = 1;
+
+            while (numSet.has(currentNum + 1)) {
+                currentNum++;
+                currentSequence++;
+            }
+
+            longestSequence = Math.max(longestSequence, currentSequence);
+        }
+    }
+
+    return longestSequence;
+}
+
+// const arr = [100, 4, 200, 1, 3, 2];
+// console.log(longestConsecutiveSequence(arr)); // Output: 4
+
+
+// 37. Write a function to find the shortest subarray with sum greater than or equal to a given value.
+
+// 1st way
+
+function shortestSubarrayWithSum(arr, target) {
+    let minLength = Infinity;
+    let sum = 0;
+    let start = 0;
+
+    for (let end = 0; end < arr.length; end++) {
+        sum += arr[end];
+        
+        while (sum >= target) {
+            minLength = Math.min(minLength, end - start + 1);
+            sum -= arr[start];
+            start++;
+        }
+    }
+
+    return minLength === Infinity ? 0 : minLength;
+}
+
+// const arr = [2, 3, 1, 2, 4, 3];
+// const target = 7;
+// console.log(shortestSubarrayWithSum(arr, target)); // Output: 2
+
+
+// 2nd way
+
+function shortestSubarrayWithSum(arr, target) {
+    let minLength = Infinity;
+
+    arr.reduce((sum, num, index) => {
+        sum += num;
+        let start = 0;
+        while (sum >= target) {
+            minLength = Math.min(minLength, index - start + 1);
+            sum -= arr[start];
+            start++;
+        }
+        return sum;
+    }, 0);
+
+    return minLength === Infinity ? 0 : minLength;
+}
+
+// const arr = [2, 3, 1, 2, 4, 3];
+// const target = 7;
+// console.log(shortestSubarrayWithSum(arr, target)); // Output: 2
 
 
 
+// 38. Write a function to find the longest subarray with sum less than or equal to a given value.
+
+// 1st way
+
+function longestSubarrayWithSum(arr, target) {
+    let maxLength = 0;
+    let sum = 0;
+    let start = 0;
+
+    for (let end = 0; end < arr.length; end++) {
+        sum += arr[end];
+        
+        while (sum > target) {
+            sum -= arr[start];
+            start++;
+        }
+
+        maxLength = Math.max(maxLength, end - start + 1);
+    }
+
+    return maxLength;
+}
+
+// const arr = [1, 2, 3, 4, 5];
+// const target = 9;
+// console.log(longestSubarrayWithSum(arr, target)); // Output: 4
+
+
+// 2nd way
+
+function longestSubarrayWithSum(arr, target) {
+    let maxLength = 0;
+    let sum = 0;
+    let start = 0;
+
+    arr.reduce((prev, curr, index) => {
+        sum += curr;
+        while (sum > target) {
+            sum -= arr[start];
+            start++;
+        }
+        maxLength = Math.max(maxLength, index - start + 1);
+        return sum;
+    }, 0);
+
+    return maxLength;
+}
+
+// const arr = [1, 2, 3, 4, 5];
+// const target = 9;
+// console.log(longestSubarrayWithSum(arr, target)); // Output: 4
 
 
 
+// 39. Write a function to find the maximum subarray sum.
+
+// 1st way
+
+function maxSubarraySum(arr) {
+    let maxSum = -Infinity;
+    let currentSum = 0;
+
+    for (const num of arr) {
+        currentSum = Math.max(num, currentSum + num);
+        maxSum = Math.max(maxSum, currentSum);
+    }
+
+    return maxSum;
+}
+
+// const arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+// console.log(maxSubarraySum(arr)); // Output: 6
+
+
+// 2nd way
+
+function maxSubarraySum(arr) {
+    let maxSum = -Infinity;
+    let currentSum = 0;
+
+    arr.forEach(num => {
+        currentSum = Math.max(num, currentSum + num);
+        maxSum = Math.max(maxSum, currentSum);
+    });
+
+    return maxSum;
+}
+
+// const arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+// console.log(maxSubarraySum(arr)); // Output: 6
 
 
 
+// 40. Write a function to find the maximum product subarray.
+
+// 1st way
+
+function maxProductSubarray(nums) {
+    if (nums.length === 0) return 0;
+
+    let maxProduct = nums[0];
+    let minProduct = nums[0];
+    let result = nums[0];
+
+    for (let i = 1; i < nums.length; i++) {
+        const tempMax = maxProduct;
+        maxProduct = Math.max(nums[i], nums[i] * maxProduct, nums[i] * minProduct);
+        minProduct = Math.min(nums[i], nums[i] * tempMax, nums[i] * minProduct);
+        result = Math.max(result, maxProduct);
+    }
+
+    return result;
+}
+
+// const nums = [2, 3, -2, 4];
+// console.log(maxProductSubarray(nums)); // Output: 6
 
 
+// 2nd way
 
+function maxProductSubarray(nums) {
+    if (nums.length === 0) return 0;
+
+    let maxProduct = nums[0];
+    let minProduct = nums[0];
+    let result = nums[0];
+
+    nums.slice(1).forEach(num => {
+        const tempMax = maxProduct;
+        maxProduct = Math.max(num, num * maxProduct, num * minProduct);
+        minProduct = Math.min(num, num * tempMax, num * minProduct);
+        result = Math.max(result, maxProduct);
+    });
+
+    return result;
+}
+
+// const nums = [2, 3, -2, 4];
+// console.log(maxProductSubarray(nums)); // Output: 6
 
 
 
